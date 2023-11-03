@@ -1,0 +1,24 @@
+{
+  "name": "resilientdb-javascript-sdk",
+  "version": "0.0.3",
+  "description": "Resilient DB JavaScript SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuelili/resilientdb-javascript-sdk.git"
+  },
+  "keywords": [
+    "resilientdb",
+    "javascript",
+    "sdk"
+  ],
+  "author": "Samuel Li, Christopher Chen, Jamie Hsi, Shrey Gupta, Tyler Beer",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/samuelili/resilientdb-javascript-sdk/issues"
+  },
+  "homepage": "https://github.com/samuelili/resilientdb-javascript-sdk#readme"
+}
