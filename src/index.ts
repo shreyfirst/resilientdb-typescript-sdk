@@ -1,3 +1,5 @@
-export function add(a: number, b: number): number {
-  return a + b;
+import ResilientDB from "./ResilientDB";
+
+export default {
+  ResilientDB
 }
