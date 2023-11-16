@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { NetworkClient } from "./types";
+import { NetworkClient } from "./types.js";
 
 
 class NodeFetchClient implements NetworkClient {
@@ -10,7 +10,7 @@ class NodeFetchClient implements NetworkClient {
     return fetch(url, {
       method,
       body: JSON.stringify(body)
-    }).then(res => res.json()) as Promise<TReturn>;
+    }).then((res: any) => res.json()) as Promise<TReturn>;
   }
 }
 

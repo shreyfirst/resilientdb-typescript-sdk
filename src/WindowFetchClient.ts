@@ -1,4 +1,4 @@
-import { NetworkClient } from "./types";
+import { NetworkClient } from "./types.js";
 
 class WindowFetchClient implements NetworkClient {
   constructor() {

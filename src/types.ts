@@ -13,6 +13,6 @@ export interface NetworkClient {
 }
 
 // TODO: check
-export type Transaction {
+export type Transaction = {
   amount: number
 }

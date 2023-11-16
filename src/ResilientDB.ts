@@ -1,4 +1,4 @@
-import { NetworkClient, Transaction } from "./types";
+import { NetworkClient, Transaction } from "./types.js";
 
 class ResilientDB {
   uri: string;
