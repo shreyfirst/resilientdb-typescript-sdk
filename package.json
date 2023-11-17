@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
