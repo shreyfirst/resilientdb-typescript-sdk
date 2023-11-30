@@ -1,18 +1,19 @@
 export interface NetworkClient {
   request<TReturn extends object>(options: {
     url: string,
+    headers?: Record<string, string>
   } & (
       | {
         method: 'GET',
       }
       | {
         method: 'POST',
-        body: object
+        body: string | object
       }
     )): Promise<TReturn>
 }
 
-export type RetriveTransaction = {
+export type RetrieveTransaction = {
   id: string;
   version: string;
   amount: number; // integer
