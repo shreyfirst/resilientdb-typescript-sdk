@@ -1,4 +1,6 @@
-import { FilterKeys, NetworkClient, PrepareAsset, RetrieveTransaction, UpdateAsset } from "./types.js";
+import Base58 from "bs58";
+import nacl from "tweetnacl";
+import { CommitTransaction, FilterKeys, NetworkClient, PrepareAsset, RetrieveTransaction, UpdateAsset, WithData } from "./types.js";
 
 /**
  * See https://github.com/ResilientApp/ResilientDB-GraphQL/blob/main/app.py
@@ -12,19 +14,48 @@ class ResilientDB {
     this.client = client;
   }
 
-  // Queries
+  async getTransaction(requestId: string): Promise<RetrieveTransaction> {
+    const result = await this.client.request<WithData<RetrieveTransaction>>({
+      url: `${this.uri}/graphql`,
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        query: `
+        query {
+          getTransaction(
+            filter: {
+              id: ${requestId}
+            }
+          ) {
+            id
+            version
+            amount
+            uri
+            type
+            publicKey
+            operation
+            metadata
+            asset
+          }
+        }        
+        `
+      }
+    });
+    
+    if (result.errors && result.errors.length > 0)
+      throw result.errors;
 
-  // : Promise<RetrieveTransaction>
-  async getTransactions() {
-
+    return result.data;
   }
 
-  // filter: {
-  //   ownerPublicKey: ${ownerPublicKey}
-  //   recipientPublicKey: ${recipientPublicKey}
-  // }
+  async getAllTransactions(): Promise<RetrieveTransaction[]> {
+    return this.getFilteredTransactions();
+  }
+
   async getFilteredTransactions(filter?: FilterKeys): Promise<RetrieveTransaction[]> {
-    const transactions = await this.client.request<RetrieveTransaction[]>({
+    const result = await this.client.request<WithData<RetrieveTransaction[]>>({
       url: `${this.uri}/graphql`,
       method: "POST",
       headers: {
@@ -35,8 +66,8 @@ class ResilientDB {
         query {
           getFilteredTransactions(
             filter: {
-              ownerPublicKey: null,
-              recipientPublicKey: null
+              ownerPublicKey: ${filter?.ownerPublicKey || null},
+              recipientPublicKey: ${filter?.recipientPublicKey || null}
             }
           ) {
             id
@@ -53,15 +84,46 @@ class ResilientDB {
         `
       }
     });
+    
+    if (result.errors && result.errors.length > 0)
+      throw result.errors;
 
-    return transactions;
+    return result.data;
   }
 
   // Mutations
 
-  // : Promise<CommitTransaction>
-  async postTransaction(transaction: PrepareAsset) {
-  
+  async postTransaction(transaction: PrepareAsset): Promise<CommitTransaction> {
+    const result = await this.client.request<WithData<{
+      postTransaction: CommitTransaction
+    }>>({
+      url: `${this.uri}/graphql`,
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        query: `
+        mutation {
+          postTransaction(data: {
+            operation: "${transaction.operation}",
+            amount: ${transaction.amount},
+            signerPublicKey: "${transaction.signerPublicKey}",
+            signerPrivateKey: "${transaction.signerPrivateKey}",
+            recipientPublicKey: "${transaction.recipientPublicKey}",
+            asset: """{"data": ${JSON.stringify(transaction.asset)}}"""
+          }) {
+            id  
+          }
+        }        
+        `
+      }
+    });
+
+    if (result.errors && result.errors.length > 0)
+      throw result.errors;
+
+    return result.data.postTransaction;
   }
 
   // : Promise<RetrieveTransaction>
@@ -71,12 +133,15 @@ class ResilientDB {
 
   // : Promise<RetrieveTransaction[]>
   async updateMultipleTransaction(transactions: UpdateAsset[]) {
-    
+
   }
 
   // : Promise<Keys>
-  async generateKeys() {
-
+  static generateKeys() {
+    var keyPair = nacl.sign.keyPair();
+    var pk = Base58.encode(keyPair.publicKey);
+    var sk = Base58.encode(keyPair.secretKey.slice(0, 32));
+    return { publicKey: pk, privateKey: sk };
   }
 }
 
