@@ -15,7 +15,9 @@ class ResilientDB {
   }
 
   async getTransaction(requestId: string): Promise<RetrieveTransaction> {
-    const result = await this.client.request<WithData<RetrieveTransaction>>({
+    const result = await this.client.request<WithData<{
+      getTransaction: RetrieveTransaction
+    }>>({
       url: `${this.uri}/graphql`,
       method: "POST",
       headers: {
@@ -43,11 +45,11 @@ class ResilientDB {
         `
       }
     });
-    
+
     if (result.errors && result.errors.length > 0)
       throw result.errors;
 
-    return result.data;
+    return result.data.getTransaction;
   }
 
   async getAllTransactions(): Promise<RetrieveTransaction[]> {
@@ -55,7 +57,9 @@ class ResilientDB {
   }
 
   async getFilteredTransactions(filter?: FilterKeys): Promise<RetrieveTransaction[]> {
-    const result = await this.client.request<WithData<RetrieveTransaction[]>>({
+    const result = await this.client.request<WithData<{
+      getFilteredTransactions: RetrieveTransaction[]
+    }>>({
       url: `${this.uri}/graphql`,
       method: "POST",
       headers: {
@@ -84,11 +88,11 @@ class ResilientDB {
         `
       }
     });
-    
+
     if (result.errors && result.errors.length > 0)
       throw result.errors;
 
-    return result.data;
+    return result.data.getFilteredTransactions;
   }
 
   // Mutations

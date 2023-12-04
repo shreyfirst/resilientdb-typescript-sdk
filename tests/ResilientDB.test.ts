@@ -18,15 +18,12 @@ test('postTransaction: 1 transaction', async () => {
     recipientPublicKey: receiverPair.publicKey,
     asset: {}
   });
-
-  console.debug(JSON.stringify(transaction, null, 2));
-
   expect(transaction.id.length > 0);
 });
 
-test('getFilteredTransactions', async () => {
+test('getAllTransactions', async () => {
   const client = new ResilientDB("http://localhost:8000", new NodeFetchClient());
 
-  const transactions = await client.getFilteredTransactions();
-  console.debug(JSON.stringify(transactions, null, 2));
+  const transactions = await client.getAllTransactions();
+  expect(transactions !== undefined)
 });

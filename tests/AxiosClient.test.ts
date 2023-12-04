@@ -1,19 +1,20 @@
-import NodeFetchClient from "../src/NodeFetchClient.ts";
+import axios from "axios";
+import AxiosClient from "../src/AxiosClient.ts";
 import ResilientDB from "../src/ResilientDB.ts";
 
-test('NodeFetchClient initializes', () => {
-  const client = new NodeFetchClient();
+test('AxiosClient initializes', () => {
+  const client = new AxiosClient(axios.create());
 });
 
-test('ResilientDB with NodeFetchClient', async () => {
-  const client = new ResilientDB("http://localhost:8000", new NodeFetchClient());
+test('ResilientDB with AxiosClient', async () => {
+  const client = new ResilientDB("http://localhost:8000", new AxiosClient());
 
   const transactions = await client.getAllTransactions(); // make a request and see if it works
   expect(transactions !== undefined);
 });
 
-test('ResilientDB with NodeFetchClient and mutation', async () => {
-  const client = new ResilientDB("http://localhost:8000", new NodeFetchClient());
+test('ResilientDB with AxiosClient and mutation', async () => {
+  const client = new ResilientDB("http://localhost:8000", new AxiosClient());
 
   const senderPair = ResilientDB.generateKeys();
   const receiverPair = ResilientDB.generateKeys();
@@ -28,6 +29,3 @@ test('ResilientDB with NodeFetchClient and mutation', async () => {
   
   expect(transaction.id.length > 0);
 });
-
-
-export { };
