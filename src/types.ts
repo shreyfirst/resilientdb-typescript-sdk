@@ -30,12 +30,12 @@ export type CommitTransaction = {
 }
 
 export type PrepareAsset = {
-  operation: string;
+  operation: "CREATE" | string; // TODO: figure out what operations are available
   amount: number;
   signerPublicKey: string;
   signerPrivateKey: string;
   recipientPublicKey: string;
-  asset: string;
+  asset: object;
 }
 
 export type UpdateAsset = {
@@ -56,4 +56,9 @@ export type FilterKeys = {
 export type Keys = {
   publicKey: string
   privateKey: string
+}
+
+export type WithData<T> = {
+  data: T,
+  errors?: object[]
 }
