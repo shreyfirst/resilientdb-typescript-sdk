@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, Code, Heading, Input } from '@chakra-ui/react';
 import { IconHash, IconKey, IconLoader2, IconPlus, IconRefresh } from '@tabler/icons-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { FetchClient, ResilientDB, RetrieveTransaction } from '../../';
+import { FetchClient, ResilientDB, RetrieveTransaction } from 'resilientdb-javascript-sdk';
 import './App.css';
 import PostTransactionModal from './PostTransactionModal';
 
