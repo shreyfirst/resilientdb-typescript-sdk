@@ -30,3 +30,27 @@ test('getFilteredTransactions', async () => {
   const transactions = await client.getFilteredTransactions();
   console.debug(JSON.stringify(transactions, null, 2));
 });
+
+
+test('updateTransaction', async () => {
+  const client = new ResilientDB("http://localhost:8000", new NodeFetchClient());
+
+  const transactionId = "ENTER AN ID HERE!!!";
+
+  const updatedAsset = { "data": { "updatedField": "updatedValue" } };
+  const updatedAssetString = JSON.stringify(updatedAsset);
+
+  const updatedTransaction = await client.updateTransaction({
+    id: transactionId,
+    operation: 'UPDATE',
+    amount: 10,
+    signerPublicKey: "new_signer_public_key",
+    signerPrivateKey: "new_signer_private_key",
+    recipientPublicKey: "new_recipient_public_key",
+    asset: updatedAssetString
+  });
+
+  console.debug(JSON.stringify(updatedTransaction, null, 2));
+
+  expect(updatedTransaction.id).toBe(transactionId);
+});

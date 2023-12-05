@@ -126,15 +126,96 @@ class ResilientDB {
     return result.data.postTransaction;
   }
 
-  // : Promise<RetrieveTransaction>
-  async updateTransaction(transaction: UpdateAsset) {
-
+  async updateTransaction(transaction: UpdateAsset): Promise<RetrieveTransaction> {
+    const result = await this.client.request<WithData<{
+      updateTransaction: RetrieveTransaction
+    }>>({
+      url: `${this.uri}/graphql`,
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        query: `
+          mutation {
+            updateTransaction(data: {
+              id: "${transaction.id}",
+              operation: "${transaction.operation}",
+              amount: ${transaction.amount},
+              signerPublicKey: "${transaction.signerPublicKey}",
+              signerPrivateKey: "${transaction.signerPrivateKey}",
+              recipientPublicKey: "${transaction.recipientPublicKey}",
+              asset: """{"data": ${JSON.stringify(transaction.asset)}}"""
+            }) {
+              id
+              version
+              amount
+              metadata
+              operation
+              asset
+              publicKey
+              uri
+              type
+            }
+          }
+        `
+      }
+    });
+  
+    if (result.errors && result.errors.length > 0)
+      throw result.errors;
+  
+    return result.data.updateTransaction;
   }
+  
+  
 
-  // : Promise<RetrieveTransaction[]>
-  async updateMultipleTransaction(transactions: UpdateAsset[]) {
-
+  async updateMultipleTransaction(transactions: UpdateAsset[]): Promise<RetrieveTransaction[]> {
+    const transactionData = transactions.map(record => `
+      {
+        id: "${record.id}",
+        operation: "${record.operation}",
+        amount: ${record.amount},
+        signerPublicKey: "${record.signerPublicKey}",
+        signerPrivateKey: "${record.signerPrivateKey}",
+        recipientPublicKey: "${record.recipientPublicKey}",
+        asset: ${JSON.stringify(record.asset)}
+      }
+    `).join(',');
+  
+    const result = await this.client.request<WithData<{
+      updateMultipleTransaction: RetrieveTransaction[]
+    }>>({
+      url: `${this.uri}/graphql`,
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        query: `
+          mutation {
+            updateMultipleTransaction(data: [${transactionData}]) {
+              id
+              version
+              amount
+              metadata
+              operation
+              asset
+              publicKey
+              uri
+              type
+            }
+          }
+        `
+      }
+    });
+  
+    if (result.errors && result.errors.length > 0)
+      throw result.errors;
+  
+    return result.data.updateMultipleTransaction;
   }
+  
 
   // : Promise<Keys>
   static generateKeys() {
