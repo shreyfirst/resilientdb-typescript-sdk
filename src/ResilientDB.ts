@@ -57,6 +57,7 @@ class ResilientDB {
   }
 
   async getFilteredTransactions(filter?: FilterKeys): Promise<RetrieveTransaction[]> {
+    console.log("filter", filter);
     const result = await this.client.request<WithData<{
       getFilteredTransactions: RetrieveTransaction[]
     }>>({
@@ -70,8 +71,8 @@ class ResilientDB {
         query {
           getFilteredTransactions(
             filter: {
-              ownerPublicKey: ${filter?.ownerPublicKey || null},
-              recipientPublicKey: ${filter?.recipientPublicKey || null}
+              ownerPublicKey: ${filter?.ownerPublicKey ? `"${filter.ownerPublicKey}"` : null},
+              recipientPublicKey: ${filter?.recipientPublicKey ? `"${filter.recipientPublicKey}"` : null}
             }
           ) {
             id
