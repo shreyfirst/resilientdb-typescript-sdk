@@ -1,9 +1,9 @@
 {
   "name": "resilientdb-javascript-sdk",
-  "version": "0.0.3",
+  "version": "0.1.12",
   "description": "Resilient DB JavaScript SDK",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "files": [
