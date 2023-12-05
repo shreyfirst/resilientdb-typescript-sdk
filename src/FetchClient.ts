@@ -1,8 +1,6 @@
-import fetch, { RequestInit } from "node-fetch";
 import { NetworkClient } from "./types.js";
 
-
-class NodeFetchClient implements NetworkClient {
+class FetchClient implements NetworkClient {
   commonOptions: Partial<RequestInit>
 
   constructor(commonOptions: Partial<RequestInit> = {}) {
@@ -28,4 +26,4 @@ class NodeFetchClient implements NetworkClient {
   }
 }
 
-export default NodeFetchClient;
+export default FetchClient;
