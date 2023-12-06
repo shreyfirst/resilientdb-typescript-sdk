@@ -15,7 +15,6 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
     const form = formRef.current;
 
     const senderPair = ResilientDB.generateKeys();
-    const receiverPair = ResilientDB.generateKeys();
 
     (form.elements["signerPublicKey" as unknown as number] as HTMLInputElement).value = senderPair.publicKey;
     (form.elements["signerPrivateKey" as unknown as number] as HTMLInputElement).value = senderPair.privateKey;
