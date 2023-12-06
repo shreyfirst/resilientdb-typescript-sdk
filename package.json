@@ -1,6 +1,6 @@
 {
   "name": "resilientdb-javascript-sdk",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "description": "Resilient DB JavaScript SDK",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "rm -rf dist && tsup",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
