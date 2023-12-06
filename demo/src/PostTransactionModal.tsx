@@ -19,7 +19,7 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
 
     (form.elements["signerPublicKey" as unknown as number] as HTMLInputElement).value = senderPair.publicKey;
     (form.elements["signerPrivateKey" as unknown as number] as HTMLInputElement).value = senderPair.privateKey;
-    (form.elements["recipientPublicKey" as unknown as number] as HTMLInputElement).value = receiverPair.publicKey;
+    (form.elements["recipientPublicKey" as unknown as number] as HTMLInputElement).value = "4ndMdtmPpDM1PBJHZcDddmAs8yNzzCYJ1XQY3hHVZohc";
   }, []);
 
   const postTransaction = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,6 +32,7 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
     const signerPrivateKey = data.get("signerPrivateKey") as string;
     const recipientPublicKey = data.get("recipientPublicKey") as string;
     const amount = data.get("amount") as string;
+    const fullName = data.get("fullName") as string;
     const asset = data.get("asset") as string;
 
     if (signerPublicKey.length === 0 || signerPrivateKey.length === 0 || recipientPublicKey.length === 0 || amount.length === 0) return;
@@ -42,7 +43,10 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
       signerPublicKey,
       signerPrivateKey,
       recipientPublicKey,
-      asset: JSON.parse(asset)
+      asset: {
+        ...JSON.parse(asset),
+        "name": fullName
+      }
     });
 
     console.log("Got result:", result);
@@ -75,6 +79,9 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
             <label className="block font-semibold mb-0.5 mt-2">Signer Private Key:</label>
             <Input name="signerPrivateKey" />
 
+            <label className="block font-semibold mb-0.5 mt-2">Signer Pseudonym (name):</label>
+            <Input name="fullName" />
+
             <label className="block font-semibold mb-0.5 mt-2">Recipient Public Key:</label>
             <Input name="recipientPublicKey" />
 
@@ -87,7 +94,7 @@ const PostTransactionModal = ({ open, onFinish, onClose, client }: {
               </NumberInputStepper>
             </NumberInput>
 
-            <label className="block font-semibold mb-0.5 mt-2">Recipient Public Key:</label>
+            <label className="block font-semibold mb-0.5 mt-2">Asset/Data:</label>
             <Textarea defaultValue={'{"from": "resilientdb-javascript-sdk demo"}'} name="asset" />
           </ModalBody>
 

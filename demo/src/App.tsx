@@ -84,10 +84,12 @@ function App() {
       <div className="flex justify-between mt-4 mb-2">
         <Heading size={"lg"} className="flex gap-2">
           Queried Transactions
-          <Button onClick={handleTransactions} className="gap-2"><IconRefresh /> Refresh</Button>
         </Heading>
 
+        <div className="flex flex-wrap gap-2 justify-end">
+        <Button onClick={handleTransactions} className="gap-2"><IconRefresh /> Refresh</Button>
         <Button onClick={() => setPostTransactionModalOpen(true)} className="gap-2"><IconPlus /> Post Transaction</Button>
+        </div>
       </div>
 
       <div className="flex justify-between items-center w-full sticky top-0 z-10 py-2 bg-white">
